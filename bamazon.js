@@ -5,12 +5,11 @@ var inquirer = require('inquirer');
 var prompt = require('prompt');
 
 var connection = mysql.createConnection({
-    host: 'localthost',
-    port: 3306,
-    user: 'test'
-    password: '',
-    database: 'Bamazon'
-})
+    host: "localhost",
+    user: "test",
+    password: "Welcome01",
+    database: "Bamazon"
+});
 
 connection.connect(function(err) {
     if (err) {
@@ -65,7 +64,7 @@ function viewProductForSale() {
                 console.log(rows[i].Item_ID + ' | ' +
                     rows[i].Product_Name + ' | ' +
                     rows[i].Department_Name + ' | ' +
-                    '$' + rows[i].price + ' | ' +
+                    "$" + rows[i].Price + ' | ' +
                     rows[i].Stock_Quantity);
             }
             console.log('<----------------------------------------->');
@@ -80,7 +79,7 @@ function viewLowInventory() {
                 console.log(rows[i].Item_ID + ' | ' +
                     rows[i].Product_Name + ' | ' +
                     rows[i].Department_Name + ' | ' +
-                    '$' + rows[i].price + ' | ' +
+                    '$' + rows[i].Price + ' | ' +
                     rows[i].Stock_Quantity);
             }
             console.log('<----------------------------------------->');
@@ -99,10 +98,10 @@ function addtoInventory() {
 };
 
 function addNewProduct() {
-    prompt.get(['Product_Name', 'Department_Name', 'price', 'Stock_Quantity'], function(err, result) {
-        var itemQty = parseInt(result.StockQuantity);
-        var query = "INSERT INTO Products (Product_Name, Department_Name, price, Stock Quantity)" + "VALUES (?,?,?,?)"
-        connection.query(query, [result.Product_Name, resule.Department_Name, result.price, itemQty], function(err, rwo) {
+    prompt.get(['Product_Name', 'Department_Name', 'Price', 'Stock_Quantity'], function(err, result) {
+        var itemQty = parseInt(result.Stock_Quantity);
+        var query = "INSERT INTO Products (Product_Name, Department_Name, Price, Stock_Quantity)" + "VALUES (?,?,?,?)"
+        connection.query(query, [result.Product_Name, result.Department_Name, result.Price, itemQty], function(err, rwo) {
             if (err) throw err;
         });
     });
@@ -115,7 +114,7 @@ function customerView() {
             type: 'rawlist',
             choices: function(vlaue) {
                 var choiceArray = [];
-                for (var i = 0, i, rows.length; i++) {
+                for (var i = 0; i < rows.length; i++) {
                     choiceArray.push(rows[i].Product_Name);
                 }
                 return choiceArray;
@@ -123,8 +122,8 @@ function customerView() {
             message: "What would you like to buy?"
         }).then(function(answer) {
             var i = 0,
-                count = true;
-            while (i < rows.length && count == true) {
+                cont = true;
+            while (i < rows.length && cont == true) {
                 if (rows[i].Product_Name == answer.choice) {
                     cont = false;
                     var chosenItem = rows[i];
@@ -134,9 +133,9 @@ function customerView() {
                         message: "How many would you like to buy?"
                     }).then(function(answer) {
                         var qty = parseInt(answer.qty);
-                        var itemID = parseInt(chosenItem.ItemID);
+                        var itemID = parseInt(chosenItem.Item_ID);
                         if (chosenItem.Stock_Quantity >= qty) {
-                            var query = "UPDATE Products SET StockQuantity = (StockQuantity - ?) WHERE ItemID = ?";
+                            var query = "UPDATE Products SET Stock_Quantity = (Stock_Quantity - ?) WHERE Item_ID = ?";
                             connection.query(query, [qty, itemID], function(err, row) {
                                 if (err) {
                                     console.log(err);
@@ -174,11 +173,11 @@ function startBamazon() {
     }, ]).then(function(answer) {
         switch (answer.action) {
             case 'Customer View':
-                customerViewforBamazon();
+                customerView();
                 break;
 
             case 'Manager View':
-                managerViewforBamazon();
+                managerView();
                 break;
 
             case 'Exit':
