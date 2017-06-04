@@ -1,0 +1,27 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bamazon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lou-HTX/Bamazon.git"
+  },
+  "keywords": [
+    "bamazon"
+  ],
+  "author": "Lou-HTX",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lou-HTX/Bamazon/issues"
+  },
+  "homepage": "https://github.com/Lou-HTX/Bamazon#readme",
+  "dependencies": {
+    "inquirer": "^3.0.6",
+    "mysql": "^2.13.0",
+    "prompt": "^1.0.0"
+  }
+}
